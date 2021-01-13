@@ -1,0 +1,83 @@
+GET meuteste/_search
+
+{
+  "took" : 232,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 1,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "meuteste",
+        "_type" : "_doc",
+        "_id" : "2",
+        "_score" : 1.0,
+        "_source" : {
+          "nome" : "Felipe Queiroz",
+          "endereco" : "Rua das laranjeiras, 42",
+          "idade" : 22
+        }
+      }
+    ]
+  }
+}
+
+
+PUT meuteste/_doc/3
+{
+  "nome" : "Daniel",
+  "endereco": "Rua pericles 50", 
+  "idade" : 30
+}
+
+
+GET meuteste/_search
+{
+  "query": {
+    "match": {
+      "nome": "daniel"
+    }
+  }
+}
+OU
+GET meuteste/_search?q=nome:daniel
+
+{
+  "took" : 130,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 1,
+      "relation" : "eq"
+    },
+    "max_score" : 0.8025915,
+    "hits" : [
+      {
+        "_index" : "meuteste",
+        "_type" : "_doc",
+        "_id" : "3",
+        "_score" : 0.8025915,
+        "_source" : {
+          "nome" : "Daniel",
+          "endereco" : "Rua pericles 50",
+          "idade" : 30
+        }
+      }
+    ]
+  }
+}

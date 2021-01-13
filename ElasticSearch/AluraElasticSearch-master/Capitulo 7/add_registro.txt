@@ -1,0 +1,91 @@
+Para testar nossa estratégia, adicione os seguintes registros:
+
+
+POST /catalogo_v3/_doc/1
+{
+    "nome": "João Silva",
+    "interesses": ["futebol", "música", "literatura"],
+    "cidade": "São Paulo",
+    "formação": "Letras",
+    "estado": "SP",
+    "país": "Brasil"
+}
+
+POST /catalogo_v3/_doc/2
+{
+    "nome": "Maria Silva",
+    "interesses": ["pintura", "literatura", "teatro"],
+    "cidade": "Diamantina",
+    "formação": "Artes Plásticas",
+    "estado": "MG",
+    "país": "Brasil"
+}
+
+POST /catalogo_v3/_doc/3
+{
+    "nome": "Richard Edward",
+    "interesses": ["matemática", "física", "música"],
+    "cidade": "Boston",
+    "formação": "Física",
+    "estado": "MA",
+    "país": "Estados Unidos"
+}
+
+POST /catalogo_v3/_doc/4
+{
+    "nome": "Patrick von Steppat",
+    "interesses": ["computação", "culinária", "cinema"],
+    "cidade": "Rio de Janeiro",
+    "formação": "Gastronomia",
+    "estado": "RJ",
+    "país": "Brasil"
+}
+
+POST /catalogo_v3/_doc/5
+{
+  "nome": "Paulo Eduardo de Azevedo Silveira",
+  "interesses": ["computação", "literatura"],
+  "cidade": "São Paulo",
+  "formação": "Computação",
+  "estado": "SP",
+  "país": "Brasil"
+}
+
+POST /catalogo_v3/_doc/6
+{
+  "nome": "Michael Jordan",
+  "interesses": ["basquete"],
+  "cidade": "Chicago",
+  "formação": "Artes",
+  "estado": "IL",
+  "país": "Estados Unidos"
+}
+
+POST /catalogo_v3/_doc/7
+{
+  "nome": "Marcelo Negrão",
+  "interesses": ["volei"],
+  "cidade": "São Paulo",
+  "formação": "Adminstração",
+  "estado": "SP",
+  "país": "Brasil"
+}
+
+
+E busque por todas as pessoas que tenham interesse em esportes
+
+
+GET /catalogo_v3/_search?q=interesses:esportes
+
+
+Para encontrar todas as pessoas que tenham interesse em exatas, basta ir no índice catalogo_v3, no tipo pessoas e procurar quem tenha interesse em exatas.
+
+Como estamos procurando um termo em um atributo específico, precisamos explicitá-lo (interesses:exatas).
+
+Logo:
+
+
+GET /catalogo_v3/_search?q=interesses:exatas
+
+
+Repare que pessoas com interesse em matemática, física e computação também são buscadas, isso por causa da nossa lista de sinônimos que foi configurada na hora da criação do índice catalogo_v3.

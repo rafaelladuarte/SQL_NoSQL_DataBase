@@ -1,0 +1,261 @@
+POST _bulk
+{ "index" : { "_index" : "estados", "_id" : "1" } }
+{ "nome" : "São Paulo" , "UF" : "sp", "habitantes" : "12180000" }
+{ "index" : { "_index" : "estados", "_id" : "2" } }
+{ "nome" : "Rio de Janeiro" , "UF" : "rj", "habitantes" : "6300000" }
+{ "index" : { "_index" : "estados", "_id" : "3" } }
+{ "nome" : "Bahia" , "UF" : "ba", "habitantes" : "15300000" }
+
+
+POST _reindex
+{
+  "source": {
+    "index": "estados"
+  },
+  "dest": {
+    "index": "estadosv2"
+  }
+}
+
+
+{
+  "took" : 1711,
+  "timed_out" : false,
+  "total" : 3,
+  "updated" : 0,
+  "created" : 3,
+  "deleted" : 0,
+  "batches" : 1,
+  "version_conflicts" : 0,
+  "noops" : 0,
+  "retries" : {
+    "bulk" : 0,
+    "search" : 0
+  },
+  "throttled_millis" : 0,
+  "requests_per_second" : -1.0,
+  "throttled_until_millis" : 0,
+  "failures" : [ ]
+}
+
+
+GET estados/_mapping
+{
+  "estados" : {
+    "mappings" : {
+      "properties" : {
+        "UF" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "habitantes" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "nome" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+PUT estadosv3/
+{
+  "mappings": {
+    "properties": {
+      "habitantes" : {
+        "type": "integer"
+      }
+    }
+  }
+}
+
+
+POST _reindex
+{
+  "source": {
+    "index": "estados"
+  },
+  "dest": {
+    "index": "estadosv3"
+  }
+}
+
+
+GET estadosv3/_count
+resultado esperado:
+{
+  "count" : 3,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  }
+}
+
+
+GET estadosv3/_mapping
+resultado esperado:
+{
+  "estadosv3" : {
+    "mappings" : {
+      "properties" : {
+        "UF" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "habitantes" : {
+          "type" : "integer"
+        },
+        "nome" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+GET estadosv3/_search
+{
+  "aggs": {
+    "maishabitantes": {
+      "max": {
+        "field": "habitantes"
+      }
+    }
+  },
+  "sort": [
+    {
+      "habitantes": {
+        "order": "desc"
+      }
+    }
+  ], 
+  "size": 1
+}
+resultado esperado:
+ {
+  "hits" : {
+    "total" : {
+      "value" : 3,
+      "relation" : "eq"
+    },
+    "max_score" : null,
+    "hits" : [
+      {
+        "_index" : "estadosv3",
+        "_type" : "_doc",
+        "_id" : "3",
+        "_score" : null,
+        "_source" : {
+          "nome" : "Bahia",
+          "UF" : "ba",
+          "habitantes" : "15300000"
+        },
+        "sort" : [
+          15300000
+        ]
+      }
+    ]
+  },
+  "aggregations" : {
+    "maishabitantes" : {
+      "value" : 1.53E7
+    }
+  }
+}
+
+
+PUT _ingest/pipeline/ajustauf
+{
+  "processors": [
+    {
+      "uppercase": {
+        "field": "UF"
+      }
+    }
+  ]
+}
+
+
+POST _reindex
+{
+  "source": {
+    "index": "estados"
+  },
+  "dest": {
+    "index": "estadosv3",
+    "pipeline": "ajustauf"
+  }
+}
+
+
+GET estadosv3/_search
+resultado esperado:
+{
+        "_index" : "estadosv3",
+        "_type" : "_doc",
+        "_id" : "1",
+        "_score" : 1.0,
+        "_source" : {
+          "UF" : "SP",
+          "habitantes" : "12180000",
+          "nome" : "São Paulo"
+        }
+      },
+      {
+        "_index" : "estadosv3",
+        "_type" : "_doc",
+        "_id" : "2",
+        "_score" : 1.0,
+        "_source" : {
+          "UF" : "RJ",
+          "habitantes" : "6300000",
+          "nome" : "Rio de Janeiro"
+        }
+      },
+      {
+        "_index" : "estadosv3",
+        "_type" : "_doc",
+        "_id" : "3",
+        "_score" : 1.0,
+        "_source" : {
+          "UF" : "BA",
+          "habitantes" : "15300000",
+          "nome" : "Bahia"
+        }
+      }
+
+
+

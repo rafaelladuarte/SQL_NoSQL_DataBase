@@ -1,0 +1,9 @@
+db.produtos.insertOne({
+    marca: "Apple",
+    modelo: "iPhone 11",
+    descricao: "O celular mais novo da Apple com duas",
+    sistema: "iOS 13",
+    memoria: "128GB",
+    chips: 1,
+    preco: NumberDecimal("4999.99"),
+})

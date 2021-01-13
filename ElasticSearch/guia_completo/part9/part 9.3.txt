@@ -1,0 +1,123 @@
+PUT vendas/
+{
+  "mappings": {
+    "properties": {
+      "items" : {
+        "type": "nested",
+        "properties": {
+          "nomeproduto" : 
+          {
+            "type" : "text"
+          },
+          "quantidade" : {
+            "type" : "integer"
+          },
+          "preco" : {
+            "type" : "float"
+          }
+        }
+      },
+      "codigovenda" : {
+        "type" : "keyword"
+      }
+    }
+  }
+}
+
+
+PUT vendas/_doc/1
+{
+  "items" : [
+    {
+      "nomeproduto" : "Vassoura Tunada",
+      "quantidade" : 2,
+      "preco" : 1.85
+    },
+    {
+      "nomeproduto" : "Arroz",
+      "quantidade" : 3,
+      "preco" : 3.90
+    }
+    ]
+}
+
+
+GET vendas/_mapping
+RESULTADO ESPERADO
+{
+  "vendas" : {
+    "mappings" : {
+      "properties" : {
+        "codigovenda" : {
+          "type" : "keyword"
+        },
+        "items" : {
+          "type" : "nested",
+          "properties" : {
+            "nomeproduto" : {
+              "type" : "text"
+            },
+            "preco" : {
+              "type" : "float"
+            },
+            "quantidade" : {
+              "type" : "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+PUT _ingest/pipeline/camponovo
+{
+  "processors": [
+    {
+      "foreach": {
+        "field": "items",
+        "processor": {
+          "set": {
+            "field": "_ingest._value.camponovo",
+            "value": "=D"
+          }
+        }
+      }
+    }
+  ]
+}
+
+
+POST vendas/_update_by_query?pipeline=camponovo
+
+
+GET vendas/_doc/1
+RESULTADO ESPERADO
+{
+  "_index" : "vendas",
+  "_type" : "_doc",
+  "_id" : "1",
+  "_version" : 3,
+  "_seq_no" : 2,
+  "_primary_term" : 1,
+  "found" : true,
+  "_source" : {
+    "items" : [
+      {
+        "preco" : 1.85,
+        "nomeproduto" : "Vassoura Tunada",
+        "camponovo" : "=D",
+        "quantidade" : 2
+      },
+      {
+        "preco" : 3.9,
+        "nomeproduto" : "Arroz",
+        "camponovo" : "=D",
+        "quantidade" : 3
+      }
+    ]
+  }
+}
+
+
+

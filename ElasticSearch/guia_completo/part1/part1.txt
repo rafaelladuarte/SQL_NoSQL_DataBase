@@ -1,0 +1,39 @@
+PUT meuteste/_doc/1
+{
+"nome" : "Felipe Queiroz",
+"endereco" : "Rua das laranjeiras, 42",
+"idade" : 22
+}
+
+GET meuteste/_mapping
+
+DELETE meuteste
+
+PUT meuteste
+{
+  "mappings": {
+    "properties": {
+      "nome" : {
+        "type" : "text"
+      },
+       "endereco" : {
+         "type" : "keyword"
+       },
+       "idade" : {
+         "type" : "integer"
+       }
+    }
+  }
+}
+
+PUT meuteste/_doc/1
+{
+"nome" : "Felipe Queiroz",
+"endereco" : "Rua das laranjeiras, 42",
+"idade" : 22
+}
+
+GET meuteste/_mapping
+
+GET meuteste/_settings
+ 

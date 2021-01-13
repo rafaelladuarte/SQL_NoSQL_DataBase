@@ -1,0 +1,59 @@
+GET _nodes/_master
+
+
+GET _nodes
+
+
+GET /_nodes/_all,master:false
+GET /_nodes/data:true,ingest:true
+GET /_nodes/coordinating_only:true
+
+
+GET _cluster/health
+
+
+PUT saude
+PUT saude/_settings
+{
+    "number_of_replicas": 1
+ 
+}
+GET _cluster/health/saude?level=shards
+RESULTADO ESPERADO
+"indices" : {
+    "saude" : {
+      "status" : "yellow",
+      "number_of_shards" : 1,
+      "number_of_replicas" : 1,
+      "active_primary_shards" : 1,
+      "active_shards" : 1,
+      "relocating_shards" : 0,
+      "initializing_shards" : 0,
+      "unassigned_shards" : 1,
+      "shards" : {
+        "0" : {
+          "status" : "yellow",
+          "primary_active" : true,
+          "active_shards" : 1,
+          "relocating_shards" : 0,
+          "initializing_shards" : 0,
+          "unassigned_shards" : 1
+        }
+      }
+    }
+}
+
+
+GET _tasks
+
+
+GET _tasks?detailed=true&actions=*reindex
+
+
+POST _tasks/TASKID/_cancel
+
+
+GET _cluster/allocation/explain
+
+
+POST /_cluster/reroute?retry_failed=true

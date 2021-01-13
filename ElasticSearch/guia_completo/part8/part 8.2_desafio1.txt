@@ -1,0 +1,122 @@
+DESAFIO 1
+“Queremos saber quanto faturou a franquia Toy Story” (
+  Sem o 4o filme pois a base só possui filmes até 2017).”
+
+
+GET filmes/_search
+{
+  "query": {
+    "match_phrase": {
+      "title": "toy story"
+    }
+  }
+}
+
+GET filmes/_search
+{
+  "query": {
+    "match_phrase": {
+      "title": "toy story"
+    }
+  },
+  "aggs": {
+    "maximofaturamento": {
+      "max": {
+        "field": "revenue"
+      }
+    }
+  }
+}
+RESULTADO ESPERADO (FIM DO JSON RESPONSE)
+
+  "aggregations" : {
+    "maximofaturamento" : {
+      "value" : 1.066969703E9
+    }
+  }
+
+  GET filmes/_search
+{
+  "query": {
+    "match_phrase": {
+      "title": "toy story"
+    }
+  },
+  "aggs": {
+    "maximofaturamento": {
+      "max": {
+        "field": "revenue"
+      }
+    }
+  },
+  "sort": [
+    {
+      "revenue": {
+        "order": "desc"
+      }
+    }
+  ], 
+  "size": 1
+}
+RESULTADO ESPERADO
+{
+  "took" : 2,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 5,
+      "relation" : "eq"
+    },
+    "max_score" : null,
+    "hits" : [
+      {
+        "_index" : "filmes",
+        "_type" : "_doc",
+        "_id" : "NUNrr28B3DrmhggQts90",
+        "_score" : null,
+        "_source" : {
+          "adult" : "False",
+          "belongs_to_collection" : "{'id': 10194, 'name': 'Toy Story Collection', 'poster_path': '/7G9915LfUQ2lVfwMEEhDsn3kT4B.jpg', 'backdrop_path': '/9FBwqcd9IRruEDUrTdcaafOMKUq.jpg'}",
+          "budget" : "200000000",
+          "genres" : "[{'id': 16, 'name': 'Animation'}, {'id': 10751, 'name': 'Family'}, {'id': 35, 'name': 'Comedy'}]",
+          "homepage" : "http://disney.go.com/toystory/",
+          "id" : "10193",
+          "imdb_id" : "tt0435761",
+          "original_language" : "en",
+          "original_title" : "Toy Story 3",
+          "overview" : "Woody, Buzz, and the rest of Andy's toys haven't been played with in years. With Andy about to go to college, the gang find themselves accidentally left at a nefarious day care center. The toys must band together to escape and return home to Andy.",
+          "popularity" : "16.96647",
+          "poster_path" : "/mMltbSxwEdNE4Cv8QYLpzkHWTDo.jpg",
+          "production_companies" : "[{'name': 'Walt Disney Pictures', 'id': 2}, {'name': 'Pixar Animation Studios', 'id': 3}]",
+          "production_countries" : "[{'iso_3166_1': 'US', 'name': 'United States of America'}]",
+          "release_date" : "2010-06-16",
+          "revenue" : "1066969703",
+          "runtime" : "103.0",
+          "spoken_languages" : "[{'iso_639_1': 'en', 'name': 'English'}, {'iso_639_1': 'es', 'name': 'Español'}]",
+          "status" : "Released",
+          "tagline" : "No toy gets left behind.",
+          "title" : "Toy Story 3",
+          "video" : "False",
+          "vote_average" : "7.6",
+          "vote_count" : "4710"
+        },
+        "sort" : [
+          1066969703
+        ]
+      }
+    ]
+  },
+  "aggregations" : {
+    "maximofaturamento" : {
+      "value" : 1.066969703E9
+    }
+  }
+}
+
+

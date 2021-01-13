@@ -1,0 +1,101 @@
+GET meuteste/_settings
+{
+  "meuteste" : {
+    "settings" : {
+      "index" : {
+        "number_of_shards" : "5",
+        "number_of_replicas" : "1",
+        "version" : {
+          "created" : "7020099"
+        },
+        "provided_name" : "meuteste"
+      }
+    }
+  }
+}
+
+
+
+GET _cat/shards
+meuteste              0 p STARTED         2  7.4kb 127.0.0.1 node-1
+meuteste              0 r UNASSIGNED
+
+
+https://localhost:9200/_cluster/health?pretty
+"cluster_name" : "cluster-1",
+  "status" : "yellow",
+  "timed_out" : false,
+  "number_of_nodes" : 1,
+  "number_of_data_nodes" : 1,
+  "active_primary_shards" : 19,
+  "active_shards" : 19,
+  "relocating_shards" : 0,
+  "initializing_shards" : 0,
+  "unassigned_shards" : 16,
+  "delayed_unassigned_shards" : 0,
+  "number_of_pending_tasks" : 0,
+  "number_of_in_flight_fetch" : 0,
+  "task_max_waiting_in_queue_millis" : 0,
+  "active_shards_percent_as_number" : 54.285714285714285
+}
+
+
+GET _cluster/allocation/explain
+{
+  "index" : "meuteste",
+  "shard" : 0,
+  "primary" : false,
+  "current_state" : "unassigned",
+  "unassigned_info" : {
+    "reason" : "INDEX_REOPENED",
+    "at" : "2020-01-08T22:15:16.260Z",
+    "last_allocation_status" : "no_attempt"
+  },
+  "can_allocate" : "no",
+  "allocate_explanation" : "cannot allocate because allocation is not permitted to any of the nodes",
+  "node_allocation_decisions" : [
+    {
+      "node_id" : "Y8xjnik4Qsywbo66EwHh8w",
+      "node_name" : "node-1",
+      "transport_address" : "127.0.0.1:9300",
+      "node_attributes" : {
+        "ml.machine_memory" : "17073397760",
+        "xpack.installed" : "true",
+        "data" : "hot",
+        "ml.max_open_jobs" : "20"
+      },
+      "node_decision" : "no",
+      "deciders" : [
+        {
+          "decider" : "same_shard",
+          "decision" : "NO",
+          "explanation" : "the shard cannot be allocated to the same node on which a copy of the shard already exists [[meuteste][0], node[Y8xjnik4Qsywbo66EwHh8w], [P], s[STARTED], a[id=eDKeOeKbTfe2ejEynuh0XQ]]"
+        }
+      ]
+    }
+  ]
+}
+
+PUT meuteste/_settings
+{
+  "number_of_replicas": 0
+}
+
+GET _cluster/health?pretty
+{
+  "cluster_name" : "cluster-1",
+  "status" : "green",
+  "timed_out" : false,
+  "number_of_nodes" : 1,
+  "number_of_data_nodes" : 1,
+  "active_primary_shards" : 19,
+  "active_shards" : 19,
+  "relocating_shards" : 0,
+  "initializing_shards" : 0,
+  "unassigned_shards" : 0,
+  "delayed_unassigned_shards" : 0,
+  "number_of_pending_tasks" : 0,
+  "number_of_in_flight_fetch" : 0,
+  "task_max_waiting_in_queue_millis" : 0,
+  "active_shards_percent_as_number" : 100.0
+}

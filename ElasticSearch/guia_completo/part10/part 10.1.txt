@@ -1,0 +1,78 @@
+GET _analyze
+{
+  "analyzer": "english",
+  "text": ["The Quick Brown Fox."]
+}
+RESULTADO ESPERADO
+{
+  "tokens" : [
+    {
+      "token" : "quick",
+      "start_offset" : 4,
+      "end_offset" : 9,
+      "type" : "<ALPHANUM>",
+      "position" : 1
+    },
+    {
+      "token" : "brown",
+      "start_offset" : 10,
+      "end_offset" : 15,
+      "type" : "<ALPHANUM>",
+      "position" : 2
+    },
+    {
+      "token" : "fox",
+      "start_offset" : 16,
+      "end_offset" : 19,
+      "type" : "<ALPHANUM>",
+      "position" : 3
+    }
+  ]
+}
+
+
+GET _analyze
+{
+  "analyzer": "brazilian",
+  "text": ["Há dois dias que chove muito."]
+}
+RESULTADO ESPERADO
+{
+  "tokens" : [
+    {
+      "token" : "há",
+      "start_offset" : 0,
+      "end_offset" : 2,
+      "type" : "<ALPHANUM>",
+      "position" : 0
+    },
+    {
+      "token" : "dois",
+      "start_offset" : 3,
+      "end_offset" : 7,
+      "type" : "<ALPHANUM>",
+      "position" : 1
+    },
+    {
+      "token" : "dias",
+      "start_offset" : 8,
+      "end_offset" : 12,
+      "type" : "<ALPHANUM>",
+      "position" : 2
+    },
+    {
+      "token" : "chov",
+      "start_offset" : 17,
+      "end_offset" : 22,
+      "type" : "<ALPHANUM>",
+      "position" : 4
+    },
+    {
+      "token" : "muit",
+      "start_offset" : 23,
+      "end_offset" : 28,
+      "type" : "<ALPHANUM>",
+      "position" : 5
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+POST _reindex
+{
+  "source": {
+    "index": "meuteste"
+  },
+  "dest": {
+    "index": "meuteste2"
+  }
+}
+
+
+GET meuteste2/_mapping
+
+GET _cat/indices?v
+
+GET meuteste/_search

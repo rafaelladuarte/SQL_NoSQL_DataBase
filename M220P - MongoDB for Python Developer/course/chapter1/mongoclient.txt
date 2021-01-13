@@ -1,0 +1,71 @@
+So on this lesson we're going to discuss the MongoClient, and how we can use it to instantiate a connection to Mongo with the Python driver.
+
+So the MongoClient object is a part of the PyMongo library, and this URI string that we pass to the client is going to contain most of the information about the connection.
+
+It has our username and our password, it has the hostname of the server we want to connect to, and the name of the database that we want to connect to by default.
+
+So here, as you can see, we've only passed that URI string to the client object to instantiate it.
+
+But this is also where we would define other configuration options, like how the driver connects to MongoDB, and the nature of the operations that are performed using that connection.
+
+But for right now all we're going to use is that URI string.
+
+And if we take a look at the stats about this connection-- so as we can see this SSL flag is set to true, because we used an Atlas SRV string for our URI.
+
+That way we got an SSL connection for free.
+
+We also authenticate against the admin database by default, so that username and password from the SRV string are used to authenticate against the admin database.
+
+So now that we have our client object for our connection, we can start exploring the databases that we have access to on Atlas.
+
+And it looks like we have a few databases right now on our cluster.
+
+We're just going to focus on the MFlix database for right now.
+
+So one useful thing about the client object is that we can use property accessors to actually define database handles.
+
+So here we've defined a variable for our MFlix database, and all it took was client.mflix.
+
+We can use list collection names to get a list of the collections that are on this database.
+
+And here you can see all the collections we have on the MFlix database.
+
+So I just want to point out that we can also use a dictionary accessor to define this database handle.
+
+So this MFlix object is just as same as before, but we defined it with a dictionary accessor, instead of a property accessor.
+
+But all the collections are the same, because this refers to the same database.
+
+So now let's focus on the movies collection on the MFlix database.
+
+We can define a collection handle using a property or a dictionary accessor.
+
+As you can see here, I've used a property accessor.
+
+So now let's perform a query against the movies collection.
+
+We'll get a count of the documents with this command.
+
+And this empty Python dictionary just represents a pipeline that we would use to transform the documents that we get back.
+
+And it looks like we have about 46,000 movies in this collection.
+
+So here we've defined a MongoClient object with a few other parameters, in addition to the URI string.
+
+Here we've specified that we want the driver to wait 200 milliseconds before erroring out on a connection.
+
+And here we've specified that we want the driver to retry writes in the event of a network error.
+
+And as we can see, the stats on this client reflect the parameters that we set when we instantiated it.
+
+So the connect time at milliseconds has been set to 200, and retry writes has been set to true.
+
+If we hadn't specified these in the MongoClient object, then these would be set to the defaults of 20,000 and false, respectively.
+
+So just to recap, the MongoClient object accepts a lot of optional keyword arguments to fine tune the connection.
+
+But the simplest instantiation would just be with the URI string.
+
+After instantiating the client, we can create database handles with property or dictionary accessors, and create collection handles the same exact way.
+
+The vast majority of CRUD operations, like querying or updating documents, have to be performed against this collection object.

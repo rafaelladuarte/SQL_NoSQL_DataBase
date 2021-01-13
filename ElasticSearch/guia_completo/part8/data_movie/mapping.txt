@@ -1,0 +1,75 @@
+{
+  "adult": {
+    "type": "keyword"
+  },
+  "belongs_to_collection": {
+    "type": "text"
+  },
+  "budget": {
+    "type": "long"
+  },
+  "genres": {
+    "type": "text"
+  },
+  "homepage": {
+    "type": "keyword"
+  },
+  "id": {
+    "type": "long"
+  },
+  "imdb_id": {
+    "type": "keyword"
+  },
+  "original_language": {
+    "type": "keyword"
+  },
+  "original_title": {
+    "type": "text"
+  },
+  "overview": {
+    "type": "text"
+  },
+  "popularity": {
+    "type": "double"
+  },
+  "poster_path": {
+    "type": "keyword"
+  },
+  "production_companies": {
+    "type": "text"
+  },
+  "production_countries": {
+    "type": "text"
+  },
+  "release_date": {
+    "type": "date",
+    "format" : "yyyy-MM-dd"
+  },
+  "revenue": {
+    "type": "long"
+  },
+  "runtime": {
+    "type": "double"
+  },
+  "spoken_languages": {
+    "type": "text"
+  },
+  "status": {
+    "type": "keyword"
+  },
+  "tagline": {
+    "type": "text"
+  },
+  "title": {
+    "type": "text"
+  },
+  "video": {
+    "type": "keyword"
+  },
+  "vote_average": {
+    "type": "double"
+  },
+  "vote_count": {
+    "type": "long"
+  }
+}

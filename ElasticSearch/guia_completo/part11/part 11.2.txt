@@ -1,0 +1,32 @@
+$ mkdir /home/elastic/repo1
+
+
+path.repo: "/home/elastic/repo1"
+
+
+path.repo: [ "/home/elastic/repo1" , "/home/elastic/repo2" ] 
+
+
+PUT /_snapshot/repo_backup
+{
+  "type" : "fs",
+  "settings": {
+    "location": "/home/elastic/repo1"
+  }
+}
+
+
+POST /_snapshot/repo_backup/snapshot_1?wait_for_completion=true
+
+
+DELETE *
+
+POST /_snapshot/repo_backup/snapshot_1/_restore
+{
+  "ignore_unavailable": true, 
+  "include_aliases" : false
+  
+}
+
+
+GET _cat/indices?v

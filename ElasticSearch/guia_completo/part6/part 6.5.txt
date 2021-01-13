@@ -1,0 +1,130 @@
+PUT _ilm/policy/expurgo30dias
+{
+  "policy": {
+    "phases": {
+      "delete": {
+        "min_age": "30d",
+        "actions": {
+          "delete": {}
+        }
+      }
+    }
+  }
+}
+
+
+PUT indicequeseraexpurgado
+{
+  "settings": {
+    "index.lifecycle.name" : "expurgo30dias"
+  }
+}
+PUT indicequeseraexpurgado/_doc/1
+{
+  "campo1" : "teste"
+}
+
+
+GET indicequeseraexpurgado/_settings
+RESULTADO ESPERADO:
+{
+  "indicequeseraexpurgado" : {
+    "settings" : {
+      "index" : {
+        "lifecycle" : {
+          "name" : "expurgo30dias"
+        },
+        "number_of_shards" : "1",
+        "provided_name" : "indicequeseraexpurgado",
+        "creation_date" : "1581275822926",
+        "number_of_replicas" : "0",
+        "uuid" : "_ZdAICmdSySKzsUJQxevrg",
+        "version" : {
+          "created" : "7020099"
+        }
+      }
+    }
+  }
+}
+
+
+
+PUT _ilm/policy/exercicio1
+{
+  "policy": {
+    "phases": {
+      "hot": {
+          "rollover": {
+            "max_size": "50gb"
+          }
+        }
+      }
+    }
+  }
+
+
+
+PUT _ilm/policy/exercicio1
+{
+  "policy": {
+    "phases": {
+      "hot": {
+          "rollover": {
+            "max_size": "50gb"
+          }
+        },
+        "warm": {
+          "min_age": "1d",
+          "actions": {
+            "shrink": {
+              "number_of_shards": 1
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+
+PUT _ilm/policy/exercicio1
+{
+  "policy": {
+    "phases": {
+      "hot": {
+        "actions": { 
+          "rollover": {
+            "max_size": "50gb"
+          }
+        }
+        },
+        "warm": {
+          "min_age": "1d",
+          "actions": {
+            "shrink": {
+              "number_of_shards": 1
+            }
+          }
+        },
+        "cold": {
+          "min_age": "7d",
+          "actions": {
+              "allocate" : {
+                "require" : {
+                  "hardware" : "cold"
+                }
+              }
+            }
+          },
+          "delete": {
+            "min_age": "30d",
+            "actions": {
+              "delete": {}
+            }
+          }
+        }
+      }
+    }
+
+
+

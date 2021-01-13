@@ -1,0 +1,149 @@
+GET filmes/_search
+{
+  "aggs": {
+    "filmespormes": {
+      "date_histogram": {
+        "field" : "release_date",
+        "calendar_interval" : "month"
+      }
+    }
+  },
+  "size" : 0
+}
+
+GET filmes/_search
+{
+  "aggs": {
+    "amedia_duracao": {
+      "avg": {
+        "field" : "runtime"
+      }
+    }
+  },
+  "size": 0
+}
+
+GET filmes/_search
+  {
+    "aggs": {
+      "pormes": {
+        "date_histogram": {
+          "field" : "release_date",
+          "calendar_interval" : "month"
+        },
+        "aggs" : {
+          "budget_maximo" : {
+            "max" : {
+              "field" : "budget"
+            }
+          }
+        }
+      }
+    }, 
+    "size" : 0
+  }
+
+  GET filmes/_search
+  {
+    "aggs": {
+      "pormes": {
+        "date_histogram": {
+          "field" : "release_date",
+          "calendar_interval" : "month"
+        },
+        "aggs" : {
+          "budget_maximo" : {
+            "max" : {
+              "field" : "budget"
+            }
+          }
+        }
+      },
+      "maiorbudgetdetodos": {
+        "max_bucket": {
+          "buckets_path" : "pormes>budget_maximo"
+        }}
+    }, 
+    "size" : 0
+  }
+
+  "maiorbudgetdetodos" : {
+      "value" : 3.8E8,
+      "keys" : [
+        "2011-05-01"
+      ]}
+
+      GET filmes/_search
+{
+  "query": {
+    "range": {
+      "release_date": {
+        "gte": "2011-05-01",
+        "lte": "2011-06-01"
+      }
+    }
+  },
+  "sort": [
+    {
+      "budget": {
+        "order": "desc"
+      }
+    }
+  ], 
+  "size": 1
+}
+
+{
+  "took" : 4,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 101,
+      "relation" : "eq"
+    },
+    "max_score" : null,
+    "hits" : [
+      {
+        "_index" : "filmes",
+        "_type" : "_doc",
+        "_id" : "3RQFrm8BHlatihf9OJM5",
+        "_score" : null,
+        "_source" : {
+          "adult" : "False",
+          "belongs_to_collection" : "{'id': 295, 'name': 'Pirates of the Caribbean Collection', 'poster_path': '/zT5UKFhq9nk97VGlBbAxlAK8UFN.jpg', 'backdrop_path': '/cnKAGbX1rDkAquF2V1wVkptHDJO.jpg'}",
+          "budget" : "380000000",
+          "genres" : "[{'id': 12, 'name': 'Adventure'}, {'id': 28, 'name': 'Action'}, {'id': 14, 'name': 'Fantasy'}]",
+          "homepage" : "http://disney.go.com/pirates/index-on-stranger-tides.html#/video/",
+          "id" : "1865",
+          "imdb_id" : "tt1298650",
+          "original_language" : "en",
+          "original_title" : "Pirates of the Caribbean: On Stranger Tides",
+          "overview" : "Captain Jack Sparrow crosses paths with a woman from his past, and he's not sure if it's love -- or if she's a ruthless con artist who's using him to find the fabled Fountain of Youth. When she forces him aboard the Queen Anne's Revenge, the ship of the formidable pirate Blackbeard, Jack finds himself on an unexpected adventure in which he doesn't know who to fear more: Blackbeard or the woman from his past.",
+          "popularity" : "27.88772",
+          "poster_path" : "/wNUDAq5OUMOtxMlz64YaCp7gZma.jpg",
+          "production_companies" : "[{'name': 'Walt Disney Pictures', 'id': 2}, {'name': 'Jerry Bruckheimer Films', 'id': 130}, {'name': 'Moving Picture Company (MPC)', 'id': 20478}]",
+          "production_countries" : "[{'iso_3166_1': 'US', 'name': 'United States of America'}]",
+          "release_date" : "2011-05-14",
+          "revenue" : "1045713802",
+          "runtime" : "136.0",
+          "spoken_languages" : "[{'iso_639_1': 'en', 'name': 'English'}, {'iso_639_1': 'es', 'name': 'Español'}]",
+          "status" : "Released",
+          "tagline" : "Live Forever Or Die Trying.",
+          "title" : "Pirates of the Caribbean: On Stranger Tides",
+          "video" : "False",
+          "vote_average" : "6.4",
+          "vote_count" : "5068"
+        },
+        "sort" : [
+          380000000
+        ]
+      }
+    ]
+  }
+}

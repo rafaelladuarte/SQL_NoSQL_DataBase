@@ -1,0 +1,189 @@
+PUT teste/
+{
+  "mappings": {
+    "dynamic_templates" : [
+        {
+          "strings" : {
+            "match_mapping_type" : "string",
+            "mapping" : {
+              "type" : "keyword"
+            }
+          }
+        }
+      ]
+  }
+}
+
+
+PUT teste/_doc/1
+{
+  "nome" : "James Sullivan"
+}
+
+
+GET teste/_mapping
+{
+  "teste" : {
+    "mappings" : {
+      "dynamic_templates" : [
+        {
+          "strings" : {
+            "match_mapping_type" : "string",
+            "mapping" : {
+              "type" : "keyword"
+            }
+          }
+        }
+      ],
+      "properties" : {
+        "nome" : {
+          "type" : "keyword"
+        }
+      }
+    }
+  }
+}
+
+
+PUT teste_novo/_doc/1
+{
+  "nome" : "James Sullivan"
+}
+GET teste_novo/_mapping
+{
+  "teste_novo" : {
+    "mappings" : {
+      "properties" : {
+        "nome" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+PUT teste1/
+{
+  "mappings": {
+    "dynamic_templates" : [
+        {
+          "dinamicotexto" : {
+            "path_match" : "texto.*",
+            "mapping" : {
+              "type" : "keyword"
+            }
+          }
+        },
+        {
+          "dinamicointeiros" : {
+            "path_match" : "num.*",
+            "mapping" : {
+              "type" : "integer"
+            }
+          }
+        }
+      ]
+  }
+}
+
+
+PUT teste1/_doc/1
+{
+  "texto.nome" : "Mike Wazausky",
+  "num.idade" : 17
+}
+
+
+GET teste1/_mapping
+{
+  "teste1" : {
+    "mappings" : {
+      "dynamic_templates" : [
+        {
+          "dinamicotexto" : {
+            "path_match" : "texto.*",
+            "mapping" : {
+              "type" : "keyword"
+            }
+          }
+        },
+        {
+          "dinamicointeiros" : {
+            "path_match" : "num.*",
+            "mapping" : {
+              "type" : "integer"
+            }
+          }
+        }
+      ],
+      "properties" : {
+        "num" : {
+          "properties" : {
+            "idade" : {
+              "type" : "integer"
+            }
+          }
+        },
+        "texto" : {
+          "properties" : {
+            "nome" : {
+              "type" : "keyword"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+PUT teste2/_doc/1
+{
+  "texto.nome" : "Mike Wazausky",
+  "num.idade" : 17
+}
+GET teste2/_mapping
+{
+  "teste2" : {
+    "mappings" : {
+      "properties" : {
+        "num" : {
+          "properties" : {
+            "idade" : {
+              "type" : "long"
+            }
+          }
+        },
+        "texto" : {
+          "properties" : {
+            "nome" : {
+              "type" : "text",
+              "fields" : {
+                "keyword" : {
+                  "type" : "keyword",
+                  "ignore_above" : 256
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+PUT my_index
+{
+  "mappings": {
+    "dynamic": strict
+  }
+}
+

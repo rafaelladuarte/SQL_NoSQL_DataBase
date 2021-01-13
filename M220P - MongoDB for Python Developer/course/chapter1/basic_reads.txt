@@ -1,0 +1,95 @@
+In this lesson, we're going to perform our first read operation in MongoDB.
+
+So here I've imported PyMongo, set up my URI to connect to my own Atlas cluster, set the client to connect, set the DB object against M 220, and set a collection object called movies.
+
+This is a find one command, which returns the first document in natural order.
+
+Natural order refers to the order in which the database refers to documents on disk.
+
+But the actual order of documents is determined internally.
+
+So we shouldn't rely on the natural order to have any particular structure.
+
+Let's see what document it finds.
+
+We also haven't passed anything in the query predicate, so MongoDB isn't going to filter out any documents from the movies collection.
+
+It's going to return the first document of any kind.
+
+This command, however, has a query predicate mandating that Salma Hayek was in the cast of the movie.
+
+The query predicate is just a Python dictionary.
+
+And PyMongo will turn this into BSON for us before sending the query to MongoDB.
+
+And we can see that even though the value of the cast field is an array, we can query it as if it were just a string.
+
+We can do this because MongoDB treats arrays as first class objects.
+
+Now find one is a pretty useful command when we just need one document.
+
+But that's often not the case.
+
+We typically don't want to limit our query to one document, and we also might want to store on a field in the collection instead of just natural order.
+
+So this is a regular find query, which we can use to retrieve all documents in a collection.
+
+This query didn't return a document.
+
+Instead the driver sends back a cursor object, and we can treat this like any other Python iterable.
+
+And we see that the cursor had 29 elements.
+
+Here we're going to store our cursor in a variable and then print out documents contained in the cursor.
+
+And look at that.
+
+We have access to our documents in the cursor.
+
+Dumps is from the JSON Util Library.
+
+And we're using it to print the output in this nice format.
+
+An important thing to remember is that we can only iterate through this cursor once.
+
+Once we iterate through the entire cursor, we can no longer pull any documents from it.
+
+Now, the previous query returned every matching document in its entirety.
+
+But what if we don't need all of that information?
+
+Say we just one the names of the movies Salma Hayek has been in.
+
+We can specify that we want Salma Hayek to be in the cast of the movie here and then specify that we only want the title back.
+
+The second dictionary is referred to as the projection of the query.
+
+Let's see it in action.
+
+That's a lot easier to read.
+
+And we didn't even have to [INAUDIBLE] to print it.
+
+But we still have this underscore ID field in each of the documents.
+
+MongoDB will return this underscore ID field unless we explicitly say that we don't want it.
+
+This is the way that we suppress the inclusion of the underscore ID field in our output.
+
+And we can see that we no longer have the underscore ID field and just have the title, as we expressed.
+
+Filters and projections are great because they allow more work to be done on the database side and reduce the amount of data sent over the wire.
+
+We could have just asked MongoDB for all of the documents in the collection.
+
+And then in Python code, we could have filtered for movies that have Salma Hayek, and then parse the dictionary for the title of each movie.
+
+But then MongoDB is sending all of those movies that don't have Salma Hayek in them, even though our application was going to filter those movies out anyway.
+
+It also would have meant more Python code in our application, which makes our application more complicated.
+
+So let's recap.
+
+In this lesson, we've covered reading with find one, reading with find, and iterating through cursors, and field projections with queries.
+
+And that's it for basic read operations.

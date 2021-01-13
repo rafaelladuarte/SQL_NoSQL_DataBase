@@ -1,0 +1,65 @@
+node.name: node-que-nao-e-o-da-serie
+node.attr.datacenter: d2
+
+node.attr.datacenter: d1
+
+GET _nodes/*/attributes
+{
+  "_nodes" : {
+    "total" : 2,
+    "successful" : 2,
+    "failed" : 0
+  },
+  "cluster_name" : "elasticsearch",
+  "nodes" : {
+    "-6zeOsDEQnqm_ozdAsuJuw" : {
+      "name" : "node-que-nao-e-o-da-serie"
+      "attributes" : {
+        "ml.machine_memory" : "8364630016",
+        "ml.max_open_jobs" : "20",
+        "datacenter" : "d2",
+        "xpack.installed" : "true"
+      }
+    },
+    "2Tek9C4SS7uKgGUjIl-5rQ" : {
+      "name" : "osboxes"
+      "attributes" : {
+        "ml.machine_memory" : "8364630016",
+        "xpack.installed" : "true",
+        "ml.max_open_jobs" : "20",
+        "datacenter" : "d1"
+      }
+    }
+  }
+}
+
+
+PUT indicenovo
+{
+  "settings": {
+    "number_of_shards": 2,
+    "number_of_replicas": 0
+  }
+}
+
+
+GET _cat/shards/indicenovo?v
+index      shard prirep state   docs store ip        node
+indicenovo 1     p      STARTED    0  230b 127.0.0.1 node-que-nao-e-o-da-serie
+indicenovo 0     p      STARTED    0  230b 127.0.0.1 osboxes
+
+
+PUT indicenovo/_settings
+{
+  "index" : {
+    "routing.allocation.include.datacenter" :  "d1"
+  }
+}
+
+
+GET _cat/shards/indicenovo?v
+index      shard prirep state   docs store ip        node
+indicenovo 1     p      STARTED    0  230b 127.0.0.1 osboxes
+indicenovo 0     p      STARTED    0  230b 127.0.0.1 osboxes
+
+

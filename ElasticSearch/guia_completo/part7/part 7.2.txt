@@ -1,0 +1,189 @@
+GET filmes/_search
+{
+  "query" : {
+    "terms": {
+      "title": [
+        "toy",
+        "story"
+      ]
+    }
+  },
+  "size" : 0
+}
+RESULTADO ESPERADO
+{
+  "took" : 0,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 406,
+      "relation" : "eq"
+    },
+    "max_score" : null,
+    "hits" : [ ]
+  }
+}
+
+
+GET filmes/_search
+{
+  "query" : {
+    "terms": {
+      "imdb_id": [
+        "tt0848228",
+        "tt2395427"
+      ]
+    }
+  }
+}
+RESULTADO ESPERADO
+{
+  "took" : 0,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 2,
+      "relation" : "eq"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "filmes",
+        "_type" : "_doc",
+        "_id" : "fU4apW8BKGHhU2dTMqCa",
+        "_score" : 1.0,
+        "_source" : {
+          "adult" : "False",
+          "belongs_to_collection" : "{'id': 86311, 'name': 'The Avengers Collection', 'poster_path': '/qJawKUQcIBha507UahUlX0keOT7.jpg', 'backdrop_path': '/zuW6fOiusv4X9nnW3paHGfXcSll.jpg'}",
+          "budget" : "220000000",
+          "genres" : "[{'id': 878, 'name': 'Science Fiction'}, {'id': 28, 'name': 'Action'}, {'id': 12, 'name': 'Adventure'}]",
+          "homepage" : "http://marvel.com/avengers_movie/",
+          "id" : "24428",
+          "imdb_id" : "tt0848228",
+          "original_language" : "en",
+          "original_title" : "The Avengers",
+          "overview" : "When an unexpected enemy emerges and threatens global safety and security, Nick Fury, director of the international peacekeeping agency known as S.H.I.E.L.D., finds himself in need of a team to pull the world back from the brink of disaster. Spanning the globe, a daring recruitment effort begins!",
+          "popularity" : "89.887648",
+          "poster_path" : "/cezWGskPY5x7GaglTTRN4Fugfb8.jpg",
+          "production_companies" : "[{'name': 'Paramount Pictures', 'id': 4}, {'name': 'Marvel Studios', 'id': 420}]",
+          "production_countries" : "[{'iso_3166_1': 'US', 'name': 'United States of America'}]",
+          "release_date" : "2012-04-25",
+          "revenue" : "1519557910",
+          "runtime" : "143.0",
+          "spoken_languages" : "[{'iso_639_1': 'en', 'name': 'English'}]",
+          "status" : "Released",
+          "tagline" : "Some assembly required.",
+          "title" : "The Avengers",
+          "video" : "False",
+          "vote_average" : "7.4",
+          "vote_count" : "12000"
+        }
+      },
+      {
+        "_index" : "filmes",
+        "_type" : "_doc",
+        "_id" : "oU4apW8BKGHhU2dTS8Jd",
+        "_score" : 1.0,
+        "_source" : {
+          "adult" : "False",
+          "belongs_to_collection" : "{'id': 86311, 'name': 'The Avengers Collection', 'poster_path': '/qJawKUQcIBha507UahUlX0keOT7.jpg', 'backdrop_path': '/zuW6fOiusv4X9nnW3paHGfXcSll.jpg'}",
+          "budget" : "280000000",
+          "genres" : "[{'id': 28, 'name': 'Action'}, {'id': 12, 'name': 'Adventure'}, {'id': 878, 'name': 'Science Fiction'}]",
+          "homepage" : "http://marvel.com/movies/movie/193/avengers_age_of_ultron",
+          "id" : "99861",
+          "imdb_id" : "tt2395427",
+          "original_language" : "en",
+          "original_title" : "Avengers: Age of Ultron",
+          "overview" : "When Tony Stark tries to jumpstart a dormant peacekeeping program, things go awry and Earth’s Mightiest Heroes are put to the ultimate test as the fate of the planet hangs in the balance. As the villainous Ultron emerges, it is up to The Avengers to stop him from enacting his terrible plans, and soon uneasy alliances and unexpected action pave the way for an epic and unique global adventure.",
+          "popularity" : "37.37942",
+          "poster_path" : "/t90Y3G8UGQp0f0DrP60wRu9gfrH.jpg",
+          "production_companies" : "[{'name': 'Marvel Studios', 'id': 420}, {'name': 'Prime Focus', 'id': 15357}, {'name': 'Revolution Sun Studios', 'id': 76043}]",
+          "production_countries" : "[{'iso_3166_1': 'US', 'name': 'United States of America'}]",
+          "release_date" : "2015-04-22",
+          "revenue" : "1405403694",
+          "runtime" : "141.0",
+          "spoken_languages" : "[{'iso_639_1': 'en', 'name': 'English'}]",
+          "status" : "Released",
+          "tagline" : "A New Age Has Come.",
+          "title" : "Avengers: Age of Ultron",
+          "video" : "False",
+          "vote_average" : "7.3",
+          "vote_count" : "6908"
+        }
+      }
+    ]
+  }
+}
+
+
+
+GET filmes/_search
+{
+  "query": {
+    "match": {
+      "title": "toy story"
+    }
+  },
+  "size" : 20
+}
+
+{
+        "_index" : "filmes",
+        "_type" : "_doc",
+        "_id" : "C04apW8BKGHhU2dTG2Ha",
+        "_score" : 1.0,
+        "_source" : {
+          "adult" : "False",
+          "belongs_to_collection" : "",
+          "budget" : "0",
+          "genres" : "[{'id': 14, 'name': 'Fantasy'}, {'id': 18, 'name': 'Drama'}, {'id': 9648, 'name': 'Mystery'}, {'id': 10751, 'name': 'Family'}]",
+          "homepage" : "",
+          "id" : "29911",
+          "imdb_id" : "tt0119095",
+          "original_language" : "en",
+          "original_title" : "FairyTale: A True Story",
+          "overview" : "Two children in 1917 take a photograph, believed by some to be the first scientific evidence of the existence of fairies. Based on a true story",
+          "popularity" : "3.553746",
+          "poster_path" : "/mB0KF5T2s6raTjiV676Umd8ciE0.jpg",
+          "production_companies" : "[{'name': 'Icon Productions', 'id': 152}]",
+          "production_countries" : "[{'iso_3166_1': 'GB', 'name': 'United Kingdom'}, {'iso_3166_1': 'US', 'name': 'United States of America'}]",
+          "release_date" : "1997-01-01",
+          "revenue" : "14000000",
+          "runtime" : "99.0",
+          "spoken_languages" : "[{'iso_639_1': 'en', 'name': 'English'}]",
+          "status" : "Released",
+          "tagline" : "Believe.",
+          "title" : "FairyTale: A True Story",
+          "video" : "False",
+          "vote_average" : "6.2",
+          "vote_count" : "25"
+}
+
+E temos uma drástica diferença no retorno de hits, que antes era 406.
+{
+  "took" : 0,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 5,a
+      "relation" : "eq"
+    }
+}}

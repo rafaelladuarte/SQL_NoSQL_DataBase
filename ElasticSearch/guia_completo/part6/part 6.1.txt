@@ -1,0 +1,190 @@
+{
+  "nome_sessao" : "cinemark_vingadores_08.01.2020",
+  "pessoas" : [ 
+   {
+    "nome" : "Felipe",
+    "idade" : 22,
+    "metodo_compra" : "Cartao de Credito"
+   },
+   {
+    "nome" : "Bruna",
+    "idade" : 18,
+    "metodo_compra" : "Cartao de Débito"
+   } ]  
+}
+
+PUT sessaodecinema/
+{
+  "mappings": {
+    "properties": {
+      "nome_sessao" : {
+        "type": "keyword"
+      },
+      "pessoas" : { 
+        "type" : "nested"
+      }
+    }
+  }
+}
+
+GET sessaodecinema/_search
+{
+  "query": {
+    "nested": {
+      "path": "pessoas",
+      "query": {
+        "bool": {
+          "must": [
+            { "match": { "pessoas.nome": "Felipe" }},
+            { "match": { "pessoas.sobrenome":  "Queiroz" }} 
+          ]
+        }
+      }
+    }
+  }
+}
+RESULTADO
+{
+  "took" : 1,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 1,
+      "relation" : "eq"
+    },
+    "max_score" : 1.3862944,
+    "hits" : [
+      {
+        "_index" : "sessaodecinema",
+        "_type" : "_doc",
+        "_id" : "1",
+        "_score" : 1.3862944,
+        "_source" : {
+          "nome_sessao" : "cinemark_vingadores_08.01.2020",
+          "pessoas" : [
+            {
+              "nome" : "Felipe",
+              "sobrenome" : "Queiroz",
+              "idade" : 22,
+              "metodo_compra" : "Cartao de Credito"
+            },
+            {
+              "nome" : "Bruna",
+              "sobrenome" : "Silva",
+              "idade" : 18,
+              "metodo_compra" : "Cartao de Débito"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+
+PUT meuteste3/_doc/1
+{
+  "nome" : "Felipe",
+  "sobrenome" : "Queiroz",
+  "rua" : "Rua das laranjeiras, 42",
+  "email" : "felipe@felipe.com.br",
+  "hobbies" : ["bateria", "comer churros"]
+}
+GET meuteste3/_mapping
+{
+  "meuteste3" : {
+    "mappings" : {
+      "properties" : {
+        "email" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "hobbies" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "nome" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "rua" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "sobrenome" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+GET _cat/indices/meuteste3
+yellow open meuteste3 0toHmwSMR7KSHUY9UH2mdw 5 1 1 0 7kb 7kb
+
+DELETE meuteste3
+PUT meuteste3
+{
+  "mappings": {
+    "properties": {
+      "nome" : {
+        "type": "text"
+      },
+      "sobrenome" : {
+        "type" : "text"
+      },
+      "rua" : {
+        "type" : "keyword"
+      },
+      "email" : {
+        "type" : "keyword"
+      },
+      "hobbies" : {
+        "type": "text"
+      }
+    }
+  }
+}
+
+PUT meuteste3/_doc/1
+{
+  "nome" : "Felipe",
+  "sobrenome" : "Queiroz",
+  "rua" : "Rua das laranjeiras, 42",
+  "email" : "felipe@felipe.com.br",
+  "hobbies" : ["bateria", "comer churros"]
+}
+
+GET _cat/indices/meuteste3
+yellow open meuteste3 c3DWsf1zS-yF8eAYUixWLA 5 1 1 0 5.3kb 5.3kb

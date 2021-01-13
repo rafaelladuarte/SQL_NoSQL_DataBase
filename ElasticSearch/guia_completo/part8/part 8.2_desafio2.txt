@@ -1,0 +1,307 @@
+DESAFIO 2
+“Queremos fazer uma análise detalhada do ano de 2016, onde, queremos saber qual o 
+faturamento médio de cada mês, qual o filme com o maior faturamento dentre os meses.”
+
+
+
+GET filmes/_search
+{
+  "query": {
+    "range": {
+      "release_date": {
+        "gte": "2016-01-01",
+        "lte": "2016-12-31"
+      }
+    }
+  }
+}
+
+GET filmes/_search
+{
+  "query": {
+    "range": {
+      "release_date": {
+        "gte": "2016-01-01",
+        "lte": "2016-12-31"
+      }
+    }
+  },
+  "aggs": {
+    "faturamentomes": {
+      "date_histogram": {
+        "field": "release_date",
+        "calendar_interval": "month"
+      }
+    }
+  },
+  "size": 0
+}
+
+
+GET filmes/_search
+{
+  "query": {
+    "range": {
+      "release_date": {
+        "gte": "2016-01-01",
+        "lte": "2016-12-31"
+      }
+    }
+  },
+  "aggs": {
+    "faturamentomes": {
+      "date_histogram": {
+        "field": "release_date",
+        "calendar_interval": "month"
+      },
+      "aggs": {
+        "somafaturamento": {
+          "sum": {
+            "field": "revenue"
+          }
+        },
+        "maximofaturamento" : {
+          "max": {
+            "field": "revenue"
+          }
+        }
+      }
+    }
+  },
+  "size": 0
+}
+
+
+
+GET filmes/_search
+{
+  "query": {
+    "range": {
+      "release_date": {
+        "gte": "2016-01-01",
+        "lte": "2016-12-31"
+      }
+    }
+  },
+  "aggs": {
+    "faturamentomes": {
+      "date_histogram": {
+        "field": "release_date",
+        "calendar_interval": "month"
+      },
+      "aggs": {
+        "somafaturamento": {
+          "sum": {
+            "field": "revenue"
+          }
+        },
+        "maximofaturamento" : {
+          "max": {
+            "field": "revenue"
+          }
+        }
+      }
+    },
+    "maximofaturamentomes" : {
+      "max_bucket": {
+        "buckets_path": "faturamentomes>maximofaturamento"
+      }
+    }
+  },
+  "size": 1,
+  "sort": [
+    {
+      "revenue": {
+        "order": "desc"
+      }
+    }
+  ]
+}
+
+
+
+{
+        "_index" : "filmes",
+        "_type" : "_doc",
+        "_id" : "CENrr28B3DrmhggQx_vn",
+        "_score" : null,
+        "_source" : {
+          "adult" : "False",
+          "belongs_to_collection" : "{'id': 131295, 'name': 'Captain America Collection', 'poster_path': '/2tOgiY533JSFp7OrVlkeRJvsZpI.jpg', 'backdrop_path': '/nZSYqitBkAvmoq5IrsGsSWuhSC8.jpg'}",
+          "budget" : "250000000",
+          "genres" : "[{'id': 12, 'name': 'Adventure'}, {'id': 28, 'name': 'Action'}, {'id': 878, 'name': 'Science Fiction'}]",
+          "homepage" : "http://marvel.com/captainamericapremiere",
+          "id" : "271110",
+          "imdb_id" : "tt3498820",
+          "original_language" : "en",
+          "original_title" : "Captain America: Civil War",
+          "overview" : "Following the events of Age of Ultron, the collective governments of the world pass an act designed to regulate all superhuman activity. This polarizes opinion amongst the Avengers, causing two factions to side with Iron Man or Captain America, which causes an epic battle between former allies.",
+          "popularity" : "145.882135",
+          "poster_path" : "/kSBXou5Ac7vEqKd97wotJumyJvU.jpg",
+          "production_companies" : "[{'name': 'Studio Babelsberg', 'id': 264}, {'name': 'Marvel Studios', 'id': 420}, {'name': 'Walt Disney Studios Motion Pictures', 'id': 3036}, {'name': 'Vita-Ray Dutch Productions (III)', 'id': 84424}, {'name': 'Deluxe Digital Studios', 'id': 84425}]",
+          "production_countries" : "[{'iso_3166_1': 'US', 'name': 'United States of America'}]",
+          "release_date" : "2016-04-27",
+          "revenue" : "1153304495",
+          "runtime" : "147.0",
+          "spoken_languages" : "[{'iso_639_1': 'ro', 'name': 'Română'}, {'iso_639_1': 'en', 'name': 'English'}, {'iso_639_1': 'de', 'name': 'Deutsch'}, {'iso_639_1': 'ru', 'name': 'Pусский'}]",
+          "status" : "Released",
+          "tagline" : "Divided We Fall",
+          "title" : "Captain America: Civil War",
+          "video" : "False",
+          "vote_average" : "7.1",
+          "vote_count" : "7462"
+        },
+        "sort" : [
+          1153304495
+        ]
+      }
+    ]
+  }
+
+
+
+  "aggregations" : {
+    "faturamentomes" : {
+      "buckets" : [
+        {
+          "key_as_string" : "2016-01-01",
+          "key" : 1451606400000,
+          "doc_count" : 144,
+          "somafaturamento" : {
+            "value" : 1.285259718E9
+          },
+          "maximofaturamento" : {
+            "value" : 5.21170825E8
+          }
+        },
+        {
+          "key_as_string" : "2016-02-01",
+          "key" : 1454284800000,
+          "doc_count" : 133,
+          "somafaturamento" : {
+            "value" : 2.903191848E9
+          },
+          "maximofaturamento" : {
+            "value" : 1.023784195E9
+          }
+        },
+        {
+          "key_as_string" : "2016-03-01",
+          "key" : 1456790400000,
+          "doc_count" : 143,
+          "somafaturamento" : {
+            "value" : 1.598092932E9
+          },
+          "maximofaturamento" : {
+            "value" : 8.73260194E8
+          }
+        },
+        {
+          "key_as_string" : "2016-04-01",
+          "key" : 1459468800000,
+          "doc_count" : 163,
+          "somafaturamento" : {
+            "value" : 2.639320334E9
+          },
+          "maximofaturamento" : {
+            "value" : 1.153304495E9
+          }
+        },
+        {
+          "key_as_string" : "2016-05-01",
+          "key" : 1462060800000,
+          "doc_count" : 115,
+          "somafaturamento" : {
+            "value" : 2.357097548E9
+          },
+          "maximofaturamento" : {
+            "value" : 5.43934787E8
+          }
+        },
+        {
+          "key_as_string" : "2016-06-01",
+          "key" : 1464739200000,
+          "doc_count" : 115,
+          "somafaturamento" : {
+            "value" : 4.559742107E9
+          },
+          "maximofaturamento" : {
+            "value" : 1.028570889E9
+          }
+        },
+        {
+          "key_as_string" : "2016-07-01",
+          "key" : 1467331200000,
+          "doc_count" : 107,
+          "somafaturamento" : {
+            "value" : 2.18819255E9
+          },
+          "maximofaturamento" : {
+            "value" : 4.15484914E8
+          }
+        },
+        {
+          "key_as_string" : "2016-08-01",
+          "key" : 1470009600000,
+          "doc_count" : 115,
+          "somafaturamento" : {
+            "value" : 1.988669035E9
+          },
+          "maximofaturamento" : {
+            "value" : 7.45600054E8
+          }
+        },
+        {
+          "key_as_string" : "2016-09-01",
+          "key" : 1472688000000,
+          "doc_count" : 170,
+          "somafaturamento" : {
+            "value" : 1.643157529E9
+          },
+          "maximofaturamento" : {
+            "value" : 2.96485719E8
+          }
+        },
+        {
+          "key_as_string" : "2016-10-01",
+          "key" : 1475280000000,
+          "doc_count" : 171,
+          "somafaturamento" : {
+            "value" : 2.183505709E9
+          },
+          "maximofaturamento" : {
+            "value" : 6.77718395E8
+          }
+        },
+        {
+          "key_as_string" : "2016-11-01",
+          "key" : 1477958400000,
+          "doc_count" : 129,
+          "somafaturamento" : {
+            "value" : 3.789739778E9
+          },
+          "maximofaturamento" : {
+            "value" : 8.09342332E8
+          }
+        },
+        {
+          "key_as_string" : "2016-12-01",
+          "key" : 1480550400000,
+          "doc_count" : 99,
+          "somafaturamento" : {
+            "value" : 3.361907421E9
+          },
+          "maximofaturamento" : {
+            "value" : 1.056057273E9
+          }
+        }
+      ]
+    }
+
+
+    "maximofaturamentomes" : {
+      "value" : 1.153304495E9,
+      "keys" : [
+        "2016-04-01"
+      ]
+    }

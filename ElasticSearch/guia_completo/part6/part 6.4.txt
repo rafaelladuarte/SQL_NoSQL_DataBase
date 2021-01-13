@@ -1,0 +1,118 @@
+GET apachelogs-*/_search
+
+
+PUT _template/template_teste
+{
+  "index_patterns" : ["*"],
+  "settings" : {
+    "number_of_replicas" : 0
+  }
+}
+
+PUT validareplicas
+GET validareplicas/_settings
+RESULTADO ESPERADO
+{
+  "validareplicas" : {
+    "settings" : {
+      "index" : {
+        "creation_date" : "1579017566079",
+        "number_of_shards" : "5",
+        "number_of_replicas" : "0",
+        "uuid" : "ivZAit2iSz6h5i_Mf0mghQ",
+        "version" : {
+          "created" : "7020099"
+        },
+        "provided_name" : "validareplicas"
+      }
+    }
+  }
+}
+
+
+PUT _template/apachelogs
+{
+  "index_patterns" : ["apachelogs-*"],
+    "mappings": {
+    "properties": {
+      "request" : {
+        "type" : "text",
+        "fields": {
+          "keyword" : {
+            "type" : "keyword"
+          }
+        }
+      },
+      "response" : {
+        "type" : "integer"
+      },
+      "@timestamp" : {
+        "type": "date"
+      },
+      "bytes" : {
+        "type" : "float"
+      },
+      "browser" : {
+        "type" : "keyword"
+      },
+      "clientip" : {
+        "type" : "keyword"
+      },
+      "geolocate" : {
+        "type" : "geo_point"
+      }
+    }  
+  }  
+}
+
+
+PUT apachelogs-2020.01.14/_doc/1
+{
+  "response" : 200,
+  "request" : "/tudo-que-voce-precisa-saber-sobre-elasticsearch.html",
+  "@timestamp" : "2020-01-14T13:10:00-0300",
+  "bytes" : 8000,
+  "browser" : "Chrome for Windows",
+  "clientip" : "192.168.0.1",
+  "geolocate" : "41.12,-71.34"
+}
+
+
+GET apachelogs-2020.01.14/_mapping
+RESULTADO ESPERADO:
+{
+  "apachelogs-2020.01.14" : {
+    "mappings" : {
+      "properties" : {
+        "@timestamp" : {
+          "type" : "date"
+        },
+        "browser" : {
+          "type" : "keyword"
+        },
+        "bytes" : {
+          "type" : "float"
+        },
+        "clientip" : {
+          "type" : "keyword"
+        },
+        "geolocate" : {
+          "type" : "geo_point"
+        },
+        "request" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword"
+            }
+          }
+        },
+        "response" : {
+          "type" : "integer"
+        }
+      }
+    }
+  }
+}
+
+

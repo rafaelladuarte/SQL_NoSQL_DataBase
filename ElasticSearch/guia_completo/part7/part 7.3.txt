@@ -1,0 +1,110 @@
+GET filmes/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "terms": {
+            "production_companies": [
+              "dreamworks",
+              "pixar"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
+
+GET filmes/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "terms": {
+            "production_companies": [
+              "dreamworks",
+              "pixar"
+            ]
+          }
+        }
+      ],
+    "must_not": [
+        {
+          "match": {
+            "title" : {
+              "query": "toy story",
+              "operator": "and"
+            }
+          }
+      }]
+    }
+  }
+}
+
+
+GET filmes/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "terms": {
+            "production_companies": [
+              "dreamworks",
+              "pixar"
+            ]
+          }
+        }
+      ],
+    "must_not": [
+        {
+          "match_phrase": {
+            "title": "toy story"
+          }
+      }]
+    }
+  }
+}
+
+
+GET filmes/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "terms": {
+            "production_companies": [
+              "dreamworks",
+              "pixar"
+            ]
+          }
+        }
+      ],
+    "must_not": [
+        {
+          "match": {
+            "title" : {
+              "query": "toy story",
+              "operator": "and"
+            }
+          }
+      }],
+      "should": [
+        {
+          "range": {
+            "revenue": {
+              "gte": 250000000,
+              "lte": 500000000
+            }
+          }
+        }
+      ],
+      "minimum_should_match": 1
+    }
+  },
+  "size" : 50
+}
+

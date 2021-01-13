@@ -1,0 +1,10 @@
+GET meuteste/_doc/1
+
+POST meuteste/_update/1
+{
+  "doc" : {
+    "nome" : "Adagalberto Garcia",
+    "endereco" : "Rua das laranjeiras, 42",
+    "idade" : 22
+  }
+}
