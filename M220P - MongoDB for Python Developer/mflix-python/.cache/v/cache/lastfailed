@@ -1,4 +1,0 @@
-{
-  "tests/test_text_and_subfield_search.py::test_genre_search": true,
-  "tests/test_text_and_subfield_search.py::test_multiple_genre_search": true
-}

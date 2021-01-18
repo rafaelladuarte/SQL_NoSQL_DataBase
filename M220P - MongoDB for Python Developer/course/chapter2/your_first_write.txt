@@ -1,0 +1,73 @@
+In this lesson, we're going to cover basic write operations in MongoDB.
+
+Here, we've imported our dependency PyMongo, set up our URI to connect to our Atlas cluster, set up a client and database object.
+
+We can view the collections contained in this database with this command.
+
+And right now, it's just video_games.
+
+So here, we're creating a collection object to point to our video_games collection.
+
+And this command is inserting a single document into the video_games collection.
+
+This statement will return a result object which we're assigning to a variable called insert_result.
+
+Let's go ahead and look at the acknowledged property on insert_result.
+
+And we see that it's true.
+
+This tells us that MongoDB acknowledged our right.
+
+And here, we can see the inserted ID property.
+
+This will tell us the _ID of the inserted document.
+
+And we can see an object ID here.
+
+Now, if we wanted, we could query directly on this object ID to retrieve the document we just inserted.
+
+The insert statement is a useful type of write operation, and it's very simple.
+
+It inserts new data into the database without regard for what the new data is or was already in the database.
+
+So what happens if we want to insert our document but we're not sure if it's already in the database?
+
+This statement is called an upsert, and it's going to check for a document matching this.
+
+If it doesn't find it, then it will insert this document here.
+
+If it does find it, then it will set this information on the existing document.
+
+In this case, the operator is set, which means any fields that we specify here will be set in the document we find with this.
+
+This is a way for insert operations to be idempotent.
+
+Because we can run upserts multiple times with the same result.
+
+The first time it doesn't find the document, it will perform an insert, but all the other times it will fund the document and nothing will change.
+
+And it looks like this upsert did find the matching document, because we just inserted this exact document into the database with our insert command above.
+
+updatedExisting here, tells us that MongoDB found the document we were looking for and attempted to update it.
+
+But even though it found the document, it doesn't mean it wrote any new data to the database.
+
+The new document was the same as the old document, so after performing our upsert, we didn't have to actually update anything.
+
+That's why nModified here is 0.
+
+Now this here is a brand new document that doesn't exist in the database.
+
+As we can see, the update result is a little different than the one we had previously.
+
+updatedExisting is false, nModified is still 0, and we can see this new field called upserted with an object ID for the object that was inserted into the database.
+
+All right, let's go ahead and recap.
+
+The things that we covered in this lesson are basic inserts, basic upserts, and consuming result objects.
+
+You can find the full list of methods available and their associated result objects by looking in the PyMongo documentation, which will be linked in the reference documentation to this lesson.
+
+These methods will vary depending on the type of operation used to produce the result object.
+
+And that's it for basic inserts.

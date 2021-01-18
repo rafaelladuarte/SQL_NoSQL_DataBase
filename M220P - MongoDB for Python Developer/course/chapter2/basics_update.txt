@@ -1,0 +1,127 @@
+In this lesson, we'll discuss update operations with PyMongo.
+
+Update operations in PyMongo are identical to what you've already learned.
+
+In PyMongo, the two idiomatic update methods are update_one and update_many.
+
+Let's dive in to a quick example.
+
+First, we'll bring in our dependencies.
+
+For this lesson, we'll also bring in Faker, which was included as a dependency of the nflix application.
+
+Faker is a library that allows us to easily generate fake data, especially useful if we want to create documents to start testing against.
+
+We've seeded Faker and ran them here to ensure consistent results.
+
+One thing of note-- make sure to change the URI to your own Atlas cluster if you'd like to follow along.
+
+Next, we'll create a collection to work with called fake_users.
+
+If it exists already, we'll drop it to ensure we're working with fresh data.
+
+Here, I've made a small utility function to return back a dictionary representing a fake user.
+
+It takes this iter_count argument here so that it can determine whether a user will be given a standard or premium account.
+
+Here, I'm using Faker to generate a name, address, email, and favorite colors, and using rand to give myself an age.
+
+OK, let's create a list of 10 users to insert and insert them into our fake_users collection.
+
+OK, let's find a user to perform some update operations on with a find_one method.
+
+And it looks like we'll work with Allison Hill.
+
+Now, let's suppose Allison just had a birthday and we want to increment her age.
+
+Just like you've already learned, we can use the $increment operator.
+
+It'll increment her age by one, from 19 to hopefully 20.
+
+And we can see that Allison is now 20 years old.
+
+Happy birthday, Allison.
+
+Next, let's add black to Alison's favorite colors.
+
+Timeless.
+
+And let's view the results of that push operation.
+
+Great.
+
+We can see that black was pushed into Alison's favorite colors.
+
+Let's get a count of users with an account type of standard.
+
+It should be five.
+
+Now, let's list their names and account types out so that we can reference the names in a little bit.
+
+Great.
+
+Now, let's run a promotion where we give everyone a premium account for a week.
+
+Let's set all of their account types to premium, but also add a key called free_trial which will be set to true so we can track them.
+
+I've assigned this operation to the variable u_r, short for update result, as we'll cover that next.
+
+Now that we've updated, let's go ahead and get a count of all users with an account type of standard.
+
+It should be 0.
+
+Great.
+
+Now, let's find all users where the free_trial key is set to true.
+
+We'll also print their name and account type out for comparison to our previous output.
+
+And we can see the names are the same, and their account type is now premium.
+
+Let's take a closer look at that update result object that we've been getting back from our update operations.
+
+First, we'll look at all of the attributes on it.
+
+And we can see that there are quite a few.
+
+However, the important ones are acknowledged, matched_count, modified_count, and upserted_id.
+
+Let's go ahead and inspect just those ones.
+
+And we can see, for our last update operation, we had acknowledged true five matched, five modified, and none for upserted_id.
+
+So let's imagine that we've combined our user signup flow with updating their information.
+
+We'll create another fake user.
+
+And this time, we'll specify upsert equals true after the update operation.
+
+We know this user's email won't match anything we currently have thanks to the library figure.
+
+All right.
+
+And now let's search for the new user.
+
+And we can see that their record was successfully written.
+
+Let's look at the update result that was returned by that operational.
+
+All right.
+
+And we can see true for acknowledged, the 0 for matched_count, 0 for modified_count, and we now have an underscore ID for upserted_id.
+
+Remember, in the case of an upsert, match_count and modified_count will be 0.
+
+Lastly, we'll go ahead and drop the collection now that we're done with it.
+
+If you'd like to continue experimenting, you can skip the cell.
+
+Let's go ahead and recap what we've learned.
+
+The two idiomatic update operations in PyMongo our update_one an update_many.
+
+Update operations will return an update result with important properties acknowledged, matched_count, modified_count, and upserted_id.
+
+In the case of an upsert, modified_count and matched_count will be 0.
+
+And that covers basic update operations in PyMongo.

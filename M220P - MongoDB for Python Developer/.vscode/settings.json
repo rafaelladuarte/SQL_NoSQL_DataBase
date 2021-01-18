@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "mflix-python\\venv\\Scripts\\python.exe",
+    "python.pythonPath": "c:\\DataEngineer\\SQL_NoSQL_DataBase\\M220P - MongoDB for Python Developer\\venv\\Scripts\\python.exe",
     "git.ignoreLimitWarning": true,
     "python.testing.pytestArgs": [
         "venv"

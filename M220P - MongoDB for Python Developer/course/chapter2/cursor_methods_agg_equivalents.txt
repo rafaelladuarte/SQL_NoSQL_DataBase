@@ -1,0 +1,113 @@
+So in this lesson, we're going to discuss methods we can call against PyMongo cursors and the aggregation stages that would perform the same tasks in a pipeline.
+
+The first operation we're going to perform against the cursor is limiting the number of documents that can be returned by that cursor.
+
+So here's a collection object for the movies collection.
+
+So this is a find query with a predicate and a projection.
+
+The find method is always going to return a cursor to us.
+
+But before assigning that cursor to a variable, we can limit the number of documents that return in that cursor with this .limit method.
+
+And we can see, the cursor only returned two documents to us.
+
+Now, this is the equivalent operation with the aggregation framework.
+
+Instead of tacking a .limit to the end of the cursor, we add this $limit stage to our pipeline.
+
+And we can see, it's the same output.
+
+And these match and project stages represent the query predicate and the field projection from when we were using the query language.
+
+So the next operation we're going to perform against the cursor is sorting.
+
+This is an example of the sort cursor method.
+
+Sort takes two parameters-- the key that we're sorting on and the sorting order.
+
+In this example, we're sorting on year in increasing order.
+
+Ascending and descending are values from the PyMongol library to specified sort direction.
+
+But really, they're just the integers negative 1 and 1.
+
+And we can see that these movies were returned to us in order of the year that they were made.
+
+So here's an aggregation pipeline that performs the same operation.
+
+We've replaced our .sort cursor method with this sort stage and just specified a dictionary with the field we want to sort on and the sorting order.
+
+And we have the same output as before.
+
+So just a special case to note here.
+
+Sorting on multiple keys in the cursor method sort is going to look a little different than before.
+
+So when we sort on one key, the sort method takes two arguments-- the key and the sort order.
+
+But when we sort on two or more keys, the sort method takes a single argument, which is an array of tuples.
+
+And each tuple has the field that we want to sort on and the sorting order.
+
+And we can see that after sorting on year, the cursor actually sorted each movie title alphabetically.
+
+So here's the same operation in the aggregation framework.
+
+And you can see that the format of the sort stage doesn't change, depending on the number of fields that we sort on.
+
+That's just the cursor method.
+
+And it looks like this gave us the same results.
+
+So the last operation we're going to perform against the PyMongo cursor is skipping through the documents on the cursor.
+
+So this pipeline is going to count the number of documents in the movie's collection that were directed by Sam Raimi.
+
+The project stage shouldn't actually affect the number of results we get back.
+
+And count is just going to return a single field that has a count of the number of documents returned by this pipeline.
+
+And it looks like there are 15 movies that Sam Raimi directed in this collection.
+
+Note that the cursor method that counts documents in a cursor has actually been deprecated.
+
+So if you want to know how many documents are returned by a query, you should structure the query in the aggregation pipeline and then use this count stage.
+
+A skip method allows us to skip documents in a collection.
+
+So only documents we did not skip will appear in the cursor.
+
+Because we only have 15 documents, skipping 14 of them should only return one back to us.
+
+And it looks like we are right.
+
+It just returned one document because it skipped the first 14.
+
+The issue is, we don't really know which documents we skipped over because we haven't specified a sort key.
+
+And really, we have no idea the order in which documents are stored in the cursor.
+
+So let's sort and then skip.
+
+Here we're sorting on year in ascending order and then skipping the first 10 moves.
+
+So now that we know when we skip 10 documents, we're skipping the 10 oldest Sam Raimi movies in this collection.
+
+And it's a little hard to see here, but it did only return five movies back to us and they were the five most recent Sam Raimi movies in this collection.
+
+These cursor methods are nice because we can kind of tack them on to a cursor in the order that we want them applied.
+
+We can accomplish the same ordering in aggregation just by ordering the stages in the pipeline.
+
+So here we have a sort on year ascending before we skip 10 documents.
+
+It's a little hard to see the results right now because it's cut off by the screen.
+
+But if you want, you can download the notebook and the handout and then run it to check the output yourself.
+
+So just to recap, in this lesson we covered some cursor methods and their aggregation equivalents.
+
+Remember that there won't always be a one-to-one mapping just because the aggregation framework can do a lot more than cursors can.
+
+But these three methods exist as both aggregation stages and cursor methods.
