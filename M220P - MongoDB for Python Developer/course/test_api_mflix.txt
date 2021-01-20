@@ -1,0 +1,17 @@
+- Chapter 0
+pytest -m connection OK
+- Chapter 1
+pytest -m projection OK
+pytest -m text_and_subfield_search OK
+- Chapter 2
+pytest -m paging OK
+pytest -m facets OK
+pytest -m user_management OK
+pytest -m user_preferences OK
+pytest -m get_comments OK
+pytest -m create_update_comments OK
+pytest -m delete_comments OK
+- Chapter 3
+pytest -m user_report OK
+pytest -m migration 
+	1 failed

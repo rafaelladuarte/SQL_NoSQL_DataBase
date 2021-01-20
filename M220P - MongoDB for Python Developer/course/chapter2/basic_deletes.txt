@@ -1,0 +1,101 @@
+So in this lesson, we're going to discuss deleting documents in MongoDB.
+
+So first, I'm just going to import a Mongo client and set up my URI string, then create my client object from the URI.
+
+And since we're learning about deletes in this lesson, we don't want to work with any of our production data.
+
+We're going to create a new collection called deletes.
+
+So now that we have a collection object called deletes with no data in it, we can insert some data.
+
+We scroll over this Insert Many statement.
+
+We can see we're inserting 100 documents with _id values from 0 to 99, and this random_bool field, which will randomly be true or false.
+
+We'll also run an insertion at the end here to make sure that a 100 object IDs have been inserted into the collection.
+
+And if this is not true, we'll see an error.
+
+We've also added the drop method in the beginning of the code cell to ensure repeatability, in case we want to run through this lesson again.
+
+And it looks like that worked.
+
+OK.
+
+Let's grab the first three documents to get a sense for what they look like.
+
+And this is more or less what we were expecting.
+
+We're convinced that we have a somewhat random random_bool field, an _id value from 0 to 99.
+
+So at this point, we already know how to create, read, and update documents.
+
+So now we're going to delete some.
+
+So PyMongo offers two idiomatic delete methods-- delete_one and delete_many.
+
+We're going to take a look at both to get a sense for how they work.
+
+So delete_one is a lot like find_one in the sense that it looks for the first document that matches the query predicate.
+
+The only difference is instead of returning that document, it deletes it.
+
+If multiple documents match the predicate, delete_one will only delete the first document that it found.
+
+So next, we're going to use delete_one to delete the first document where that random_bool field was true.
+
+And if delete_one behaves the way we expect, we should be left with 99 documents afterward.
+
+So here, we're just assigning the output of this delete_one statement to a delete result or dr variable.
+
+And that variable can actually tell us how many documents were deleted.
+
+And it looks like we only deleted one document, which is what we were expecting.
+
+Delete_one is a very precise operation.
+
+So if we know a value or values that uniquely identify a specific document, we can run delete_one and guarantee that we're only going to delete that one document.
+
+We know _id is unique.
+
+So let's, for example, delete the document with _id 99.
+
+Just verifying that that document exists in the collection, and now we're going to actually run a delete_one on this one query predicate.
+
+And it looks like that works.
+
+Let's just check.
+
+And it looks like we couldn't find that document anymore, so it was in fact deleted.
+
+So next we're going to cover delete_many.
+
+Unlike delete_one, delete_many will delete all documents that match the supplied predicate.
+
+And because of this, you could consider it a little more dangerous.
+
+So to get a sense of how delete_many works, we're going to count how many documents have false and true for their random_bool value, and then we're going to use delete_many to delete all the documents that have that value false.
+
+So first, let's get a count of how many documents in this collection have the random_bool value set to false.
+
+And it looks like 44, so about half of them-- a little less than half.
+
+And let's check how many have that value set to true.
+
+And it looks like we have a few more documents with that value set to true.
+
+So now we know that 44 of the documents in our collection have random_bool set to false, which means the other 54 have the random_bool you set to true.
+
+If we run a delete_many on the documents that have random_bool set to false, as we have here, the deleted count should yield 44, which it does.
+
+And the number of documents left in the collection that have random_bool set to true should be 54.
+
+So delete_many is behaving the way we're expecting.
+
+It's only deleting the documents that match the query predicate, but it will delete all of the documents that match the predicate.
+
+So that about covers the basics of deleting documents in PyMongo.
+
+Remember that delete_one will only delete the first document that matches the supplied predicate, but delete_many will delete all of the documents that match the predicate.
+
+The number of documents that have been deleted can be accessed using the delete_count property on the resulting object of the delete operation.
