@@ -1,0 +1,15 @@
+When our application is using a Write Concern more durable than w: 1.
+
+The primary reason to use a wtimeout is because by default, when using Write Concern more durable than w: 1, there is no wtimeout, so the server will wait indefinitely for operations to complete.
+
+Our application can use wtimeout to put a time limit on how long the server waits before a Write Concern is satisfied.
+
+Incorrect answers:
+
+When our application is issuing bulk operations in large batches.
+
+When our application is using a Read Concern more durable than "available".
+
+When our application is using a connection pool of 100 or more connections.
+
+wtimeout is only relevant when using a Write Concern more durable than w: 1. wtimeout does not affect the size of the connection pool, the durability of the Read Concern, or the execution of a bulk write

@@ -1,0 +1,19 @@
+Correct answers:
+
+New operations can be serviced with pre-existing connections, so a new connection doesn't have to be created each time.
+
+This is the main benefit from using a connection pool. The overhead of creating a TCP connection often results in waiting time, but this waiting time can be avoided by reusing a connection.
+
+A large influx of operations can be handled more quickly with a pool of existing connections.
+
+A common cause of application crashes is the inability of that application to deal with an influx of operations to perform. By creating a lot of available connections before they are needed, the application has the bandwidth to service as many requests as connections, without having to create any new connections.
+
+Incorrect answers:
+
+Multiple database clients can share a connection pool.
+
+This is not true. Connection pools are specific to a database client, and the number of connections in the pool is declared when the client is initialized.
+
+The connection pool will persist after the client is terminated.
+
+This is not true. All the connections in the pool are dropped when the client object is terminated.

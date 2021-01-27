@@ -1,0 +1,125 @@
+So in this lesson, we're going to encounter some of the basic errors in the PyMongo driver and how to handle these errors in a way that makes their application more consistent and reliable.
+
+So here I'm connecting to Atlas like we have before.
+
+We're using a new collection called shipments.
+
+So the scenario for this lesson is that our application is a clothing manufacturer that also handles the shipping of their new clothing items.
+
+This shipments collection will hold a document for each shipment.
+
+And we'll take a look at those documents in a minute.
+
+So this is a short script that's going to create some test data for the clothing manufacturer.
+
+This bit's included in the notebook itself, so you can test it out.
+
+So you can see the documents that we're producing have five fields each with this truck ID determined by the iteration of our loop.
+
+So this source and destination fields are strings that are derived from this cities array.
+
+But here, we're just making sure that the destination city is, in fact, different from the source city.
+
+Each shipment also has a product and a quantity, but the part we're going to focus on is this truck ID field.
+
+This is going to record the truck currently allocated for this shipment, so that the truck can be considered unavailable for any other shipments.
+
+This way when a new shipment comes in, we can make sure that truck that gets assigned to that shipment isn't already doing one.
+
+Just going to run this script and just verify what our data looks like.
+
+And it looks like that we successfully inserted 30 documents into our collection.
+
+So if we take a look at one of these documents, we can see that they do, in fact, have the five fields that we were expecting, plus an underscore ID that Mongo added for us.
+
+The assumption I'm making for this data is that while this document exists in the collection, the shipment is still ongoing.
+
+So when this shipment is completed, we would delete this document from the collection.
+
+So that means that before, when we verified there were 30 documents in the shipments collection, that means that we also verified that 30 shipments are ongoing right now.
+
+So if we try to insert a new shipment, it would have to have a unique truck ID.
+
+This way each truck has only assigned to one shipment at a time.
+
+So this is the way that we're going to enforce uniqueness among the truck IDs in this collection.
+
+So this is called a unique index, which will create an index on the truck ID field, and also make sure that there are no duplicate truck IDs.
+
+And it created this index called truck ID 1, the one meeting that the index is sorted in ascending order.
+
+So here's an example of a shipment being added to the shipments collection.
+
+We want to ship 40 socks from New York to Atlanta.
+
+And we've assigned truck ID 4 to this shipment.
+
+This truck number could have been user input or something determined by our application.
+
+But either way, this is going to cause a duplicate key error, because we already have a shipment assigned to truck 4.
+
+So using the try accept block, our program prints out a message when the duplicate key error is thrown.
+
+This message tells us that the truck we wanted to send out, truck 4, has already been sent out for another shipment.
+
+So the application allows the insert to fail and then sends an error message up to the user to choose another truck.
+
+But we can actually be a little more proactive about handling this error if we know about the other trucks that are available for the job.
+
+So here's a new collection called trucks, which we're going to use to find another available truck.
+
+This should insert about 50 documents into the collection.
+
+It's a little hard to see, but I am actually iterating 50 times, and it looks like the count documents method gave us 50 back.
+
+So the documents in the trucks collection only have two fields.
+
+And underscore ID from 0 to 49, which will relate to the truck ID from the shipments collection.
+
+And I've assigned a random string of seven uppercase letters and numbers to be the license plate number.
+
+Although, some US states actually only allow six characters.
+
+So here's a similar block to the one we saw before, except we're handling the error in a little more of a proactive way.
+
+Instead of just servicing an error to the user, the application actually chooses a new truck, sends out that truck, and then alerts the user that the action was performed just by a different vehicle.
+
+So in this case, we tried to send truck number 4 out, but it was not available.
+
+So we chose another truck and then sent that truck out.
+
+But the way we chose this truck was actually very careful.
+
+We pulled all the distinct truck IDs from the shipments collection into this busy truck set, which basically just tells us all the trucks that are currently performing a shipment.
+
+We then pulled all the distinct underscore IDs out from the truck's collection, which actually just gives us all the trucks that we have in circulation.
+
+The difference of these two sets will give us the available trucks.
+
+So this check to see which trucks are available is actually somewhat expensive, as these two distinct queries require two database round trips.
+
+Because of this, the application takes a pretty lazy approach here, assigning trucks to shipments.
+
+So it won't actually do any round trips until the truck that it tries to send out results in a duplicate key error.
+
+This might be suitable if the collisions won't occur very often, which is to say the trucks are usually available when we try to request them.
+
+But on the rare occasions they are not available, we do a little extra work and then send out a truck that we know, for a fact, will be available.
+
+So in this last one, we demonstrated how to handle a very specific duplicate key error.
+
+And it's important to remember that this error typically occurs on the underscore ID, which is unique by default.
+
+But it also pertains to fields that are contained in a unique index, like the index we had on truck ID.
+
+Really, when handling these errors, we want to think about how much we can do after receiving the error.
+
+If there's nothing we can do in response, if this error is truly fatal, then we should just return it to the user.
+
+But if we can do something, as was the case with the shipments collection, we should try to handle the error in a more flexible way.
+
+In this example, the error was that the truck we tried to reserve was already in use.
+
+But at that time, the program actually had the resources to determine which trucks were still available.
+
+So it sent down one of those trucks instead.
