@@ -1,0 +1,77 @@
+Você está trabalhando na Secretaria da Cultura do Estado de SP, que está desenvolvendo um projeto cultural para cursos gratuitos para as pessoas do estado, com exceção da capital paulista.
+
+Como o número de vagas é limitado, a preferência será para aquelas que têm interesse por artes no cadastro da Secretaria.
+
+Você precisa obter um relatório dessas pessoas usando Elasticsearch.
+
+Entre os campos dos documentos de pessoas, estão: cidade, estado, e uma lista de interesses.
+
+O mapeamento do campo "interesses" está definido assim:
+
+
+  "mappings": {
+    "properties": {
+      .
+      .
+      .
+      "interesses": {
+        "type": "text",
+        "index": true,
+        "analyzer": "portuguese",
+        "search_analyzer": "sinonimos"
+      },
+
+
+Note que o campo "interesses" é analisado na busca com o analisador "sinonimos", assim definido:
+
+
+GET pessoas/_search
+{
+  "query": {
+    "bool" : {
+      "must" : [
+        { "term" : { "estado": "SP" } }
+      ],
+      "must_not" : [
+        { "term" : { "cidade.original": "São Paulo" } }
+      ],
+      "should": [
+        { "match" : { "interesses": "arte" } }
+      ]
+    }
+  }
+}
+
+Correto! A cláusula "must" exige que a pessoa seja do estado de SP. A cláusula "must_not" define que a cidade não pode ser a capital (São Paulo). E a cláusula "should" define que é desejável que a pessoa tenha interesse por artes. Estas terão relevância (score) maior e aparecerão no início dos resultados. Como "arte" está definido como uma lista de termos na lista de sinônimos, os interesses artísticos irão aparecer no resultado.
+
+
+GET pessoas/_search
+{
+  "query": {
+    "bool" : {
+      "must" : [
+        { "term" : { "estado": "SP" } }
+      ],
+      "must_not" : [
+        { "term" : { "cidade.original": "São Paulo" } }
+      ],
+      "should": [
+        { "match" : { "interesses": "pintur,teatr,music,cinem" } }
+      ]
+    }
+  }
+}
+
+Correto! A cláusula "must" exige que a pessoa seja do estado de SP. A cláusula "must_not" define que a cidade não pode ser a capital (São Paulo). E a cláusula "should" define que é desejável que a pessoa tenha interesse por artes. Estas terão relevância (score) maior e aparecerão no início dos resultados.
+
+    "filtro_de_sinonimos": {
+      "type": "synonym",
+      "synonyms": [
+        "arte => arte,pintur,teatr,music,cinem"
+      ]
+    }
+
+
+Como você desenvolveria uma consulta Elasticsearch para montar esse relatório para a Secretaria da Cultura de SP? Marque as alternativas válidas.
+
+

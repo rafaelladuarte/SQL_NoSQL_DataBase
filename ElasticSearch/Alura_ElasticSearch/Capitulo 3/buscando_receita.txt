@@ -1,0 +1,19 @@
+{
+    "nome": "Bolo de Fubá",
+    "descricao" : "Um delicioso bolo de fubá, com toque bem caseiro!",
+    "ingredientes" ["farinha","manteiga","fermento","açucar","leite","fubá"]
+}
+{
+    "nome": "Bolo de Chocolate",
+    "descricao" : "Um delicioso bolo de chocolate, receita da vovó !",
+    "ingredientes" ["farinha","manteiga","fermento","açucar","leite","chocolate"]
+}
+{
+    "nome": "Torta de Frango",
+    "descricao" : "Uma torta de frango incrível para o seu lanche com a família!",
+    "ingredientes" ["farinha","manteiga","fermento","sal","leite","frango"]
+}
+...
+// várias outras receitas
+
+_search?q=ingredientes:fermento&size=30

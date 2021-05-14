@@ -1,0 +1,26 @@
+Cadastre um novo documento no nosso catálogo por meio do console Dev Tools do Kibana.
+
+Envie um HTTP POST para /catalogo/_doc com o JSON abaixo:
+
+{
+  "nome": "Super Mario",
+  "interesses": [
+    "computação",
+    "games",
+    "carros"
+  ],
+  "força": 3,
+  "velocidade": 55.3,
+  "cidade": "Kyoto",
+  "formação": "Encanador",
+  "estado": "Honshu",
+  "país": "Japão",
+  "nascimento": "1982-01-21"
+}
+
+
+Quais são os tipos interferidos para os atributos força e velocidade?
+
+long e float
+
+Correto! O atributo força é do tipo long e velocidade de tipo float!
